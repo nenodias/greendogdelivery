@@ -4,6 +4,7 @@ import com.boaglio.casadocodigo.greendogdelivery.order.model.Cliente;
 import com.boaglio.casadocodigo.greendogdelivery.order.model.Item;
 import com.boaglio.casadocodigo.greendogdelivery.order.model.Pedido;
 import com.boaglio.casadocodigo.greendogdelivery.order.repository.ClienteRepository;
+import com.boaglio.casadocodigo.greendogdelivery.order.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,8 +16,8 @@ import java.util.List;
 @Component
 public class RepositoryTest implements ApplicationRunner {
 
-    private static final long ID_CLIENTE_FERNANDO = 11l;
-    private static final long ID_CLIENTE_ZE_PEQUENO = 22l;
+    private static final long ID_CLIENTE_FERNANDO = 1l;
+    private static final long ID_CLIENTE_ZE_PEQUENO = 2l;
 
     private static final long ID_ITEM1 = 100l;
     private static final long ID_ITEM2 = 101l;
