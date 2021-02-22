@@ -1,5 +1,6 @@
 package com.boaglio.casadocodigo.greendogdelivery.order.rest;
 
+import com.boaglio.casadocodigo.greendogdelivery.notificacao.EnviaNotificacao;
 import com.boaglio.casadocodigo.greendogdelivery.order.dto.RespostaDTO;
 import com.boaglio.casadocodigo.greendogdelivery.order.model.Cliente;
 import com.boaglio.casadocodigo.greendogdelivery.order.model.Item;
@@ -25,11 +26,14 @@ public class NovoPedidoController {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private EnviaNotificacao enviaNotificacao;
+
     @GetMapping("/rest/pedido/novo/{clienteId}/{listaDeItens}")
     public RespostaDTO novo(@PathVariable("clienteId") Long clienteId, @PathVariable("listaDeItens") String listaDeItens){
         RespostaDTO dto = new RespostaDTO();
         try {
-            Cliente c = clienteRepository.getOne(clienteId);
+            Cliente cliente = clienteRepository.getOne(clienteId);
             String[] listaDeItensID = listaDeItens.split(",");
 
             Pedido pedido = new Pedido();
@@ -42,11 +46,12 @@ public class NovoPedidoController {
             }
             pedido.setItens(itensPedidos);
             pedido.setValorTotal(valorTotal);
-            pedido.setCliente(c);
-            c.getPedidos().add(pedido);
-            this.clienteRepository.saveAndFlush(c);
+            pedido.setCliente(cliente);
+            cliente.getPedidos().add(pedido);
+            this.clienteRepository.saveAndFlush(cliente);
+            enviaNotificacao.enviaEmail(cliente, pedido);
             List<Long> pedidosID = new ArrayList<>();
-            for (Pedido p : c.getPedidos()) {
+            for (Pedido p : cliente.getPedidos()) {
                 pedidosID.add(p.getId());
             }
             Long ultimoPedido = Collections.max(pedidosID);
