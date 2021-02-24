@@ -5,7 +5,10 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.boaglio.casadocodigo.greendogdelivery.oferta.dto.MensagemDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +16,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RefreshScope
 @RequestMapping("/")
 public class IndexController {
 
     @Autowired
     private Environment environment;
+
+    @Value("${mensagem:nenhuma}")
+    private String message;
+
+    @Value("${debug:0}")
+    private String debug;
 
     @GetMapping("/")
     public String index() {
@@ -46,11 +56,16 @@ public class IndexController {
         return this.environment.getActiveProfiles();
     }
 
-    @GetMapping("/server")
+    @GetMapping("/servidor")
     @ResponseBody
-    public String server(HttpServletRequest request) {
+    public String servidor(HttpServletRequest request) {
         return request.getServerName() + ":" + request.getServerPort();
     }
 
+    @GetMapping("/oferta")
+    @ResponseBody
+    public MensagemDTO oferta(HttpServletRequest request) {
+        return new MensagemDTO(this.message,request.getServerName() + ":" + request.getServerPort(), this.debug);
+    }
 
 }
