@@ -31,6 +31,10 @@ public class SpringbootpropertiesApplicationTests {
 
 	private MockMvc mvc;
 
+	@Test
+	public void contextLoads() {
+	}
+
 	@Before
 	public void setUp(){
 		this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
